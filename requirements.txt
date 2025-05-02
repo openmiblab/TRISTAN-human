@@ -16,7 +16,7 @@ zarr
 napari
 dask
 # dbdicom
-# mdreg
+# mdreg[complete]
 # dcmri
 # vreg
 # miblab

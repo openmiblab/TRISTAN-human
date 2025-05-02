@@ -8,6 +8,7 @@ import dask.array as da
 import nibabel as nib
 from totalsegmentator.python_api import totalsegmentator
 import pandas as pd
+import zipfile
 
 import vreg
 import dbdicom as db
@@ -84,6 +85,43 @@ def merge_zarr(datapath, resultspath):
     # dyn = da.from_zarr(os.path.join(resultspath, 'disco.zarr'))
     # if image=='mean':
     #     img = da.mean(dyn, axis=-1).compute()
+
+
+def unzip_data(datapath, resultspath):
+    """
+    Unzips all ZIP files from 'datapath' into 'resultspath'.
+    Each ZIP file will be extracted into a folder with the same name as the ZIP file.
+    
+    Parameters:
+    - datapath: str -> Path where the ZIP files are located.
+    - resultspath: str -> Path where the extracted files should be stored.
+    """
+    # Ensure the result path exists
+    if not os.path.exists(resultspath):
+        os.makedirs(resultspath)
+    
+    # Iterate through all files in the datapath
+    file = datapath + '.zip'
+    # Check if the file is a ZIP file
+    #zip_file_path = os.path.join(datapath, file)
+    
+    # Create a folder with the same name as the ZIP file (without .zip extension)
+    extract_folder = os.path.join(resultspath, os.path.basename(datapath))
+    
+    # Ensure the folder does not already exist
+    if not os.path.exists(extract_folder):
+        os.makedirs(extract_folder)
+    
+    # Extract the ZIP file
+    try:
+        with zipfile.ZipFile(file, 'r') as zip_ref:
+            zip_ref.extractall(extract_folder)
+        print(f"✅ Extracted: {file} → {extract_folder}")
+    except zipfile.BadZipFile:
+        print(f"❌ Error: {file} is not a valid ZIP file")
+    except Exception as e:
+        print(f"❌ Error extracting {file}: {e}")
+
 
 
 def compute_mean(datapath):
@@ -272,7 +310,8 @@ def segment_molli(datapath, resultspath):
 def onescandev(datapath, resultspath):
     start_time = time.time()
 
-    # compute_mean(datapath)
+    # unzip_data(datapath, resultspath)
+    # compute_mean(resultspath)
     # segment_mean(datapath, resultspath)
     # export_time_curves(datapath, resultspath)
     # map_molli(datapath)
@@ -283,7 +322,7 @@ def onescandev(datapath, resultspath):
     # merge_zarr(datapath, resultspath)
     
     print("--- %s minutes ---" % ((time.time() - start_time)/60))
-    gui().open(datapath).use()
+    gui().open(resultspath).use()
     #gui().open(datapath).display('DISCO_mean').use()
 
 
@@ -291,15 +330,16 @@ def onescandev(datapath, resultspath):
 
 
 def onescan(datapath, resultspath, subject, visit, scan):
+    pass
 
-    # setup logger
-    logger = stages.setup_logger(subject, visit, scan)
+    # # setup logger
+    # logger = stages.setup_logger(subject, visit, scan)
 
-    # setup details dictionary
-    info = stages.setup_detail_dict(datapath, resultspath, subject, visit, scan, logger)
+    # # setup details dictionary
+    # info = stages.setup_detail_dict(datapath, resultspath, subject, visit, scan, logger)
 
-    # extract arrays from dicom
-    stages.extract_arrays(info)
+    # # extract arrays from dicom
+    # stages.extract_arrays(info)
 
     # # segment ROI pre coregistration
     # stages.segment_ROI(info, 'pre_coreg')

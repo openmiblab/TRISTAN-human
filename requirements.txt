@@ -1,23 +1,32 @@
-numpy
-scipy
-pandas
-nibabel
-pydicom
-Pillow
-matplotlib
-dipy
-pyvista
-pyvistaqt
-TotalSegmentator
-tqdm
-xlsxwriter
-openpyxl
-zarr
-napari
-dask
-# dbdicom
-# mdreg[complete]
-# dcmri
 # vreg
+# dbdicom[extensions]
+# wezel[plugins]
+# numpy
+# pydmr
+# tqdm
+# TotalSegmentator # this downgrades numpy
+# mdreg[complete]
+# zarr
+
+
+
+# scipy
+# pandas
+# nibabel
+# pydicom
+# Pillow
+# matplotlib
+# dipy
+# pyvista
+# pyvistaqt
+
+# xlsxwriter
+# openpyxl
+# zarr
+# napari
+# dask
+# pydmr
+
+
+# dcmri
 # miblab
-# wezel
